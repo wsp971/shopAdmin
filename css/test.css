@@ -1,0 +1,20 @@
+body{
+	background:red;
+}
+
+.test{
+	color: blue;
+}
+
+
+.banner{
+	width: 100px;
+	height: 50px;
+	background: url('../images/one.png') no-repeat;
+	-webkit-background-size: 100px 50px;
+	background-size: 100px 50px;
+}
+
+.hide{
+	text-indent: -99999px;
+}
