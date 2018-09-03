@@ -122,13 +122,13 @@
 			            link:'/html/addShop.shtml',
 			            text:'增加店铺',
                         icon:'md-add-circle'
-		            },
-		            {
-			            name:'addDishes',
-			            link:'/html/addDishes.html',
-			            text:'增加菜品',
-			            icon:'md-add-circle'
-		            },
+		            }
+		            // {
+			         //    name:'addDishes',
+			         //    link:'/html/addDishes.html',
+			         //    text:'增加菜品',
+			         //    icon:'md-add-circle'
+		            // },
                 ]
             }
         },

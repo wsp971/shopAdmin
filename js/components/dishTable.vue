@@ -21,11 +21,11 @@
 <script>
 	import {Card,Table,Row,Col,Page} from 'iview';
 
-	Array.prototype.average = function(){
-		let sum = 0;
-	    this.forEach(item => {sum = item + sum});
-	    return parseFloat(sum/this.length).toFixed(1);
-    };
+    // Array.prototype.average = function(){
+		// let sum = 0;
+	 //    this.forEach(item => {sum = item + sum});
+	 //    return parseFloat(sum/this.length).toFixed(1);
+    // };
 	export default {
 		props:['shopId'],
 		components:{
@@ -72,6 +72,20 @@
 									    }
 								    }
 							    }, '删除'),
+							    h('Button', {
+								    props: {
+									    type: 'info',
+									    size: 'small'
+								    },
+								    style: {
+									    marginRight: '5px'
+								    },
+								    on: {
+									    click: () => {
+										    this.showDetail(params)
+									    }
+								    }
+							    }, '详情'),
 						    ]);
 					    }
 				    }
@@ -117,8 +131,29 @@
 	        pageSizeChange(){
 
             },
+            showDetail(params){
+				this.$emit('showDetail',params.row);
+            },
 	        addDishes(){
 	        	this.$emit('showModal');
+            },
+	        remove(params){
+				this.$ajax.get({
+                    url:'/dish/delete',
+                    data:{
+                    	id: params.row._id
+                    }
+                }).then(res=>{
+                	if(res.data.code ==0){
+                		this.$Message.success('删除成功！');
+		                this.queryData();
+                    }else{
+                		this.$Message.error('删除失败');
+                    }
+                }).catch(e=>{
+                	console.log(e);
+                	this.$Message.error('删除出错！');
+                })
             }
         }
 	}

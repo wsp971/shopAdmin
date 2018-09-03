@@ -4,9 +4,9 @@ const host = 'localhost:9999';
 import {getUrlParam} from "./url";
 
 if(getUrlParam('debug')==1){
-	axios.defaults.baseURL = 'http://localhost:9999';
+	axios.defaults.baseURL = '//localhost:9999';
 }else{
-	axios.defaults.baseURL = 'http://139.199.74.176/shopServer';
+	axios.defaults.baseURL = '//aoshiman.com.cn/shopServer';
 }
 
 exports.get = function(obj){

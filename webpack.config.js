@@ -20,7 +20,9 @@ let webpackConfig = {
 		filename : "[name].bundle.js"
 	},
 	// mode: config.isdebug ? "development": "production",
-	// mode:'production',
+	mode:'production',
+	// mode:'development',
+	
 	module : {
 		rules : [
 			{
@@ -69,6 +71,7 @@ let webpackConfig = {
 			filename:"css/[name].css",//制定编译后的目录
 			allChunks:true,//把分割的块分别打包
 		}),
+		
 		
 		// new htmlWebpackPlugin(
 		// 	{
