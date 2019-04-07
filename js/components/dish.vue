@@ -12,6 +12,11 @@
                 <Col span="4" >菜品名称</Col>
                 <Col span=20>{{dishData.name}}</Col>
             </Row>
+
+            <Row>
+                <Col span="4" >菜品价格</Col>
+                <Col span=20>{{dishData.price}}</Col>
+            </Row>
             <Row>
                 <Col span="4" >菜品评分</Col>
                 <Col span=20> {{dishData.comments | averages}}</Col>

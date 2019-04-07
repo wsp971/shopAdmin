@@ -20,8 +20,8 @@ let webpackConfig = {
 		filename : "[name].bundle.js"
 	},
 	// mode: config.isdebug ? "development": "production",
-	mode:'production',
-	// mode:'development',
+	// mode:'production',
+	mode:'development',
 	
 	module : {
 		rules : [

@@ -57,6 +57,14 @@
                 </Select>
             </FormItem>
 
+            <FormItem label="价格">
+                <Input v-model="formItem.price" placeholder="请输入菜品当前价格"></Input>
+            </FormItem>
+
+            <FormItem label="原价">
+                <Input v-model="formItem.prePrice" placeholder="请输入菜品原价"></Input>
+            </FormItem>
+
             <FormItem label="菜品描述">
                 <Input v-model="formItem.description" type="textarea" :autosize="{minRows: 5,maxRows: 5}" placeholder='菜品描述~~~'></Input>
             </FormItem>
@@ -122,6 +130,8 @@
 			    formItem:{
 				    name: '',
                     type:'',
+                    price:0,
+                    prrPrice:0,
 				    description: ''
                 },
 			    dishTypeMap: this.$dishTypeMap,
@@ -154,28 +164,32 @@
 		        return this.uploadList.length >=10? 'hidden': 'visible';
 	        },
             hasTags: function(){
-
                 return  this.tags.filter( item=> this.$refs[item.key][0].isChecked );
             }
         },
         methods:{
-
-
-
 	        addDish(){
-	        	debugger;
+
+	        	// debugger;
+
 	        	if(!this.formItem.name){
 	        		this.$Message.error('请输入菜品名称');
 	        		return;
                 }
+
+
                 if(!this.formItem.type){
 	        		this.$Message.error('请选择菜品类型');
 	        		return;
                 }
+
+
                 if(!this.uploadList[0]){
 	        		this.$Message.error('请至少上传一张该菜品图片~');
 	        		return;
                 }
+
+
 	        	let postData = Object.assign(this.formItem,{
 			        shopid: this.shopId,
                     favourites: Math.floor(Math.random() * 100),
