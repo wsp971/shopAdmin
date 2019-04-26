@@ -1,5 +1,4 @@
 <style>
-
     .loginContainer{
         width: 320px;
         height: 280px;

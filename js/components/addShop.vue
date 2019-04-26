@@ -276,10 +276,12 @@
 	        		this.errTip = '请输入地址';
 	        		return;
                 }
+
                 // if(!this.uploadList[0]){
 	        		// this.errTip = '请上传店铺logo';
 	        		// return;
                 // }
+
                 let shopData = {
                     name:this.shopName,
                     phone: this.phone,
@@ -290,7 +292,6 @@
                     lat:this.latLng.lat,
                     lng: this.latLng.lng,
 	                latLng: this.latLng
-
                 };
 
                 if(this.modifyShop){
@@ -314,6 +315,7 @@
                 }
 
                 // let formData = new FormData(document.forms["shopForm"]);
+
                 ajax.post({
                     url:'/shop/insert',
                     data: shopData
@@ -336,6 +338,7 @@
 		        this.$linkPage('/html/shopList.html');
             },
 	        handleView(pic){
+
 	        	this.viewPic = pic;
 	        	this.visible = true;
             },
@@ -350,9 +353,8 @@
 	            ajax.get({
                     url:"/shop/getClientIp"
                 }).then(res=>{
-                	this.clientIp = res.ip;
+                	this.clientIp = res.data.ip;
                 	this.initMap();
-
                 });
             },
 
@@ -369,7 +371,6 @@
 		                //设置地图
 		                map : this.map,
 		                complete : function(results){
-
 			                // city.style.display = 'inline';
 			                // city.innerHTML = '所在位置: ' + results.detail.name;
 			                self.city = results.detail.name;
@@ -420,7 +421,6 @@
                             (function(n){
 	                            var marker = new qq.maps.Marker({
 		                            map: self.map,
-
 		                            position: poi.latLng
 	                            });
 	                            marker.setTitle(i + 1);

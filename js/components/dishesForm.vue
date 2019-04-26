@@ -114,7 +114,6 @@
             <div slot="footer">
             </div>
         </Form>
-
     </Modal>
 </template>
 <script>
@@ -125,7 +124,7 @@
 	        Modal,Form,FormItem,Input,Select,Option,Button,Upload,Icon,Tag
         },
     	data(){
-		    let uploadAction = this.$url.getUrlParam('debug') ==1 ? 'http://localhost:9999/shop/upload': 'http://aoshiman.com.cn/shopServer/shop/upload';
+		    let uploadAction = '//aoshiman.com.cn/shopServer/shop/upload';
 		    return {
 			    formItem:{
 				    name: '',
@@ -138,7 +137,6 @@
 			    uploadAction,
 			    uploadList:[],
 			    defaultList:[],
-
                 tags:[
                 	{name:'新品',color:'primary',isCheck: true,key:'new'},
                 	{name:'热门',color:'error',isCheck: false, key:'hot'},
@@ -151,8 +149,6 @@
                 	{name:'新客立减',color:'pink',isCheck: false, key:'newDiscount'},
                 	{name:'有红包',color:'geekblue',isCheck: false, key:'packet'}
                 ],
-
-
             }
         },
 	    mounted(){

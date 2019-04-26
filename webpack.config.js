@@ -12,17 +12,14 @@ const config = {
 };
 
 // console.log(process.env.NODE_ENV);
-console.log(config.isdebug);
+console.log('************',config.isdebug,process.env.NODE_ENV);
 let webpackConfig = {
 	output : {
 		path : path.resolve(__dirname,config.name),
 		// publicPath : '/',
 		filename : "[name].bundle.js"
 	},
-	// mode: config.isdebug ? "development": "production",
-	// mode:'production',
-	mode:'development',
-	
+	mode: config.isdebug ? "development": "production",
 	module : {
 		rules : [
 			{
@@ -88,8 +85,6 @@ let webpackConfig = {
 		// 		excludeChunks: "",
 		// 		xhtml: false
 		// }),
-		
-	
 		
 		new CleanWebpackPlugin([config.name])
 	],

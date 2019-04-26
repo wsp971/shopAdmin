@@ -5,3 +5,5 @@ export function getUrlParam (queryString,url){
 	let result = reg.exec(url);
 	return result && result[1];
 };
+
+
