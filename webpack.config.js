@@ -7,8 +7,9 @@ const util = require('./utils/util');
 
 const config = {
 	publicPath:"",
-	name:'shopAdmin',
-	isdebug : process.env.NODE_ENV == 'production' ? false : true
+	name:'package',
+	isdebug : process.env.NODE_ENV == 'production' ? false : true,
+	publishPath: '//aoshiman.com.cn/shopAdmin'
 };
 
 // console.log(process.env.NODE_ENV);
@@ -16,8 +17,8 @@ console.log('************',config.isdebug,process.env.NODE_ENV);
 let webpackConfig = {
 	output : {
 		path : path.resolve(__dirname,config.name),
-		// publicPath : '/',
-		filename : "[name].bundle.js"
+		publicPath: config.isdebug ? '/' : config.publishPath,
+		filename : "[name].[contenthash].js"
 	},
 	mode: config.isdebug ? "development": "production",
 	module : {
@@ -38,7 +39,7 @@ let webpackConfig = {
 			{
 				test:/\.css$/,
 				use : ExtractTextPlugin.extract({
-					publicPath: '../../../',                    // 重置fonts请求路径
+					publicPath: config.isdebug?'/':config.publishPath,                    // 重置fonts请求路径
 					fallback: "style-loader",
 					use: "css-loader"
 				})
@@ -49,7 +50,8 @@ let webpackConfig = {
 					loader: 'url-loader',
 					options:{
 						limit:'8192',
-						name: 'images/[hash:8].[name].[ext]'
+						name: 'images/[hash:8].[name].[ext]',
+						publicPath: config.isdebug? '/': config.publishPath
 					}
 				}
 				
@@ -68,24 +70,6 @@ let webpackConfig = {
 			filename:"css/[name].css",//制定编译后的目录
 			allChunks:true,//把分割的块分别打包
 		}),
-		
-		
-		// new htmlWebpackPlugin(
-		// 	{
-		// 		title: "This is the result",
-		// 		filename: "./login.shtml",                   /** 注入js后的文件*/
-		// 		template: "./html/login.shtml",               /** 注入前的模板文件*/
-		// 		inject: "body",                             /**  注入位置*/
-		// 		favicon: "",                                /** 网站icon*/
-		// 		chunks:['./js/entry/login'],                             /** 选择特定的trunk*/
-		// 		hash: true,
-		// 		cache: true,
-		// 		showErrors: true,
-		// 		chunksSortMode: "auto",
-		// 		excludeChunks: "",
-		// 		xhtml: false
-		// }),
-		
 		new CleanWebpackPlugin([config.name])
 	],
 	
@@ -104,19 +88,22 @@ console.log(jsEntryMap);
 
 util.fileMap('./html',htmlMap);
 
-
 Object.keys(htmlMap).forEach(key=>{
+	console.log('htmlplugin',key,htmlMap[key])
 	webpackConfig.plugins.push(new htmlWebpackPlugin({
 		template: htmlMap[key],
 		filename: htmlMap[key],
 		inject: "body",
-		minify: {
-			removeComments: true,               //去注释
-			collapseWhitespace: true,           //压缩空格
-			removeAttributeQuotes: true         //去除属性引用
-		},
+		chunksSortMode: 'none',
+		// minify: {
+		// 	removeComments: true,               //去注释
+		// 	collapseWhitespace: true,           //压缩空格
+		// 	removeAttributeQuotes: true         //去除属性引用
+		// },
 		// hash: config.isdebug ,
-		chunks: ['./js/entry' + key.replace('./html','')],
+		// allChunks: true,
+		chunks:['./js/entry' + key.replace('./html','')]
+		// chunks: ['./js/entry' + key.replace('./html','')],
 	}));
 });
 

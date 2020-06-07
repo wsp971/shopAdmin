@@ -1,15 +1,15 @@
 const fs = require('fs');
-const path = require('path');
+	const path = require('path');
 
 
 
 
 const fileMap = function(basePath,fileMap){
-	
 	if(!fs.existsSync(basePath)){
 		throw `${basePath} 路径不存在`;
 		return;
 	}
+	
 	let files = fs.readdirSync(basePath);
 	
 	files.forEach(file=>{
@@ -18,7 +18,7 @@ const fileMap = function(basePath,fileMap){
 		if(stat.isDirectory()){
 			arguments.callee.call(this, filePath,fileMap);
 		}else{
-			fileMap[eliminateSuffix(filePath)] = filePath;
+				fileMap[eliminateSuffix(filePath)] = filePath;
 		}
 		
 	})
@@ -26,6 +26,7 @@ const fileMap = function(basePath,fileMap){
 
 
 function eliminateSuffix(path){
+	console.log(path)
 	let index = path.lastIndexOf('.');
 	return path.substr(0,index);
 }

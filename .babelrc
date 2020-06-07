@@ -1,11 +1,34 @@
 {
   "presets": [
-    "env",
-    "es2015",
-    "stage-1"
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage",
+        "loose": true,
+        "debug": true,
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        }
+      }
+    ]
   ],
-  "plugins": [["import", {
-    "libraryName": "iview",
-    "libraryDirectory": "src/components"
-  }]]
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3
+      }
+    ],
+    [
+      "@babel/plugin-syntax-dynamic-import"
+    ],
+    [
+      "import",
+      {
+        "libraryName": "iview",
+        "libraryDirectory": "src/components"
+      }
+    ]
+  ]
 }

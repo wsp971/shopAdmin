@@ -35,7 +35,6 @@
 </template>
 <script>
     import md5 from 'js-md5';
-    import ajax from '../utils/ajax';
     import {Card,Input,Alert,Button,Icon} from 'iview';
     export default {
     	data(){
@@ -63,7 +62,7 @@
                 	username: this.inputUserName,
                     password: md5(this.inputPassword),
                 };
-                ajax.get({
+                this.$ajax.get({
                     url:`/adminuser/login`,
                     data:postData
                 }).then(res=>{
@@ -80,7 +79,7 @@
             },
 
             toRegister(){
-	            ajax.get({
+	            this.$ajax.get({
 		            url:`/adminuser/register`,
 		            data:{
 			            name:'李晶',

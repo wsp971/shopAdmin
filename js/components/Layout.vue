@@ -64,7 +64,7 @@
                     },
 		            {
 			            name:'addShop',
-			            link:'/html/addShop.shtml',
+			            link:'/html/addShop.html',
 			            text:'增加店铺',
                         icon:'md-add-circle'
 		            }
@@ -78,7 +78,7 @@
             logout(){
                 this.$cookie.del('loginname','/','.aoshiman.com.cn');
                 this.$cookie.del('username','/','.aoshiman.com.cn');
-                this.$linkPage('/html/login.shtml');
+                this.$linkPage('/html/login.html');
             },
             goPage(name){
 	        	let item = this.menuList.find(item=> item.name ==name);
@@ -88,7 +88,7 @@
                 const username = this.$cookie.get('username');
                 const loginname = this.$cookie.get('loginname');
                 if(!username){
-                    this.$linkPage('/html/login.shtml');
+                    this.$linkPage('/html/login.html');
                 }
                 this.loginName = loginname;
             }

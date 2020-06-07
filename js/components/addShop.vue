@@ -189,7 +189,6 @@
 
 <script>
 	import myLayout from './Layout';
-	import ajax from '../utils/ajax';
 	import { Button, Icon ,Breadcrumb,BreadcrumbItem,MenuItem,Content,Row,Col,Alert,Input, Upload, Modal} from 'iview';
 	export default {
 		data(){
@@ -296,7 +295,7 @@
 
                 if(this.modifyShop){
                 	shopData = Object.assign({},this.modifyShop,shopData);
-                	ajax.post({
+                	this.$ajax.post({
                         url:'/shop/update',
                         data: shopData
                     }).then(res=>{
@@ -316,7 +315,7 @@
 
                 // let formData = new FormData(document.forms["shopForm"]);
 
-                ajax.post({
+                this.$ajax.post({
                     url:'/shop/insert',
                     data: shopData
                 }).then( res=>{
@@ -350,7 +349,7 @@
             },
 
             getClientIp(){
-	            ajax.get({
+	            this.$ajax.get({
                     url:"/shop/getClientIp"
                 }).then(res=>{
                 	this.clientIp = res.data.ip;

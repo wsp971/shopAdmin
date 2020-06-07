@@ -1,4 +1,4 @@
 node_modules
 .vscode
 webpack.config.test.js
-shopAdmin
+package

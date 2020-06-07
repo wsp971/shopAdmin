@@ -20,12 +20,6 @@
 </template>
 <script>
 	import {Card,Table,Row,Col,Page} from 'iview';
-
-    // Array.prototype.average = function(){
-		// let sum = 0;
-	 //    this.forEach(item => {sum = item + sum});
-	 //    return parseFloat(sum/this.length).toFixed(1);
-    // };
 	export default {
 		props:['shopId'],
 		components:{
@@ -121,7 +115,6 @@
 					this.$Message.error('获取菜品错误');
 				})
             },
-
             pageChange(pageIndex){
                 this.pageIndex = pageIndex-1;
                 this.queryData();

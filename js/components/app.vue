@@ -12,7 +12,7 @@
                 <div style="margin-bottom: 10px;">
                     <Button type="info" @click="addShop">新增店铺</Button>
                     <span style="float:right; display:none;">
-                        <Input v-model="searchText" placeholder="搜索店铺" style="width: 300px"></Input>
+                        <Input v-model="searchText" placeholder="搜索店铺" style="width: 300px"/> 
                         <Button type="info" shape="circle" icon="ios-search" >搜索</Button>
                     </span>
                 </div>
@@ -56,7 +56,6 @@
 </template>
 <script>
     import myLayout from './Layout';
-    import ajax from '../utils/ajax';
     import {Breadcrumb,BreadcrumbItem,Button,Table,Input,Page,Icon} from 'iview';
 	export default {
 		data () {
@@ -84,7 +83,7 @@
                             })
                         }
 					},
-					{
+							{
 						title: '店铺名称',
 						key: 'name'
 					},
@@ -125,7 +124,7 @@
 									on: {
 										click: () => {
 											sessionStorage.setItem('modifyShopData', JSON.stringify(params.row));
-											this.$linkPage('/html/addShop.shtml');
+											this.$linkPage('/html/addShop.html');
 											console.log(params);
 										}
 									}
@@ -203,7 +202,7 @@
 			},
 			remove (params) {
 				console.log(params);
-				ajax.get({
+				this.$ajax.get({
                     url:'/shop/delete',
                     data:params.row
                 }).then(res=>{
@@ -229,7 +228,7 @@
 
             },
 			addShop(){
-				this.$linkPage('/html/addShop.shtml');
+				this.$linkPage('/html/addShop.html');
             },
             addDishes(params){
 			    this.$linkPage('/html/addDishes.html?shopid=' + params.row.id);
@@ -242,7 +241,7 @@
                 this.queryData();
             },
 			queryData(){
-				ajax.get({
+				this.$ajax.get({
 					url:`/shop/shopList`,
 					data:{
 						pageIndex: this.pageIndex,

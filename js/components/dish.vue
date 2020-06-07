@@ -82,15 +82,15 @@
 		},
 
         computed:{
-		    hasTag: function(){
-		    	let hasTag = {};
-			    if(!this.dishData.name) return;
-			    for(let key in tagMap ){
-				    if(this.dishData.tags.indexOf(key) > -1){
-				    	hasTag[key] = tagMap[key];
-				    }
-			    }
-			    return hasTag;
+                hasTag: function(){
+                let hasTag = {};
+                    if(!this.dishData.name) return;
+                                for(let key in tagMap ){
+                    if(this.dishData.tags.indexOf(key) > -1){
+                        hasTag[key] = tagMap[key];
+                    }
+                }
+                return hasTag;
             }
         },
 
