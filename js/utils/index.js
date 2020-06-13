@@ -1,31 +1,31 @@
-import * as url from './url';
+import config from '@config';
+import url from './url';
 import * as ajax from './ajax';
 import cookie from './cookie';
-import { Message } from 'iview';
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
 
-let baseUrl = '/shopAdmin';
-if (url.getUrlParam('debug') == 1) {
-    baseUrl = '';
+const { baseUrl } = config;
+function linkPage(pageurl) {
+  location.href = baseUrl + pageurl;
 }
 
-function linkPage (pageurl) {
-    location.href = baseUrl + pageurl + (url.getUrlParam('debug') == 1 ? (pageurl.indexOf('?') > -1 ? '&debug=1' : '?debug=1') : '');
-}
+// eslint-disable-next-line no-extend-native
+Array.prototype.average = average;
 
-const average = function () {
-    let sum = 0;
-    this.forEach(item => { sum = item + sum });
-    return parseFloat(sum / this.length).toFixed(1);
-};
+function average() {
+  let sum = 0;
+  this.forEach(item => { sum = item + sum; });
+  return parseFloat(sum / this.length).toFixed(1);
+}
 
 export default {
-    install (Vue) {
-        Vue.prototype.$ajax = ajax;
-        Vue.prototype.$url = url;
-        Vue.prototype.$cookie = cookie;
-        Vue.prototype.$linkPage = linkPage;
-        Vue.prototype.$Message = Message;
-        Vue.prototype.$average = average;
-    }
+  install(Vue) {
+    Vue.prototype.$ajax = ajax;
+    Vue.prototype.$url = url;
+    Vue.prototype.$cookie = cookie;
+    Vue.prototype.$linkPage = linkPage;
+    Vue.prototype.$average = average;
+    Vue.use(ViewUI);
+  },
 };
-

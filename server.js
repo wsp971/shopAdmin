@@ -1,6 +1,6 @@
 const koa = require('koa');
 
-//解析post 请求中的body
+// 解析post 请求中的body
 
 const bodyParse = require('koa-bodyparser');
 
@@ -8,22 +8,17 @@ const koaRouter = require('koa-router');
 
 const koaStatic = require('koa-static');
 
-const koaConpose = require('koa-compose');                              // 组合中间件
+const koaConpose = require('koa-compose'); // 组合中间件
 
-
-const path  = require('path');
-
-
+const path = require('path');
 
 const app = new koa();
-
 
 // app.use(async (ctx,next)=>{
 // 	await next();
 // 	ctx.response.type = 'text/html';
 // 	ctx.response.body = '<h1> hello koa</h1>'
 // });
-
 
 // app.use(async (ctx, next)=>{
 // 	ctx.body = {
@@ -39,35 +34,33 @@ const app = new koa();
 app.use(logger);
 
 const one = async (ctx, next) => {
-	console.log('>> one');
-	await next();
-	console.log('<< one');
-}
-
-const two = async (ctx, next) => {
-	console.log('>> two');
-	next();
-	
-	var aaa = await testFun();
-	console.log(aaa);
-	console.log('<< two');
-}
-
-
-async function testFun(){
-	return new Promise((resolve)=>{
-		resolve('testfun');
-	});
-}
-
-const three =  (ctx, next) => {
-	console.log('>> three');
-	next();
-	console.log('<< three');
+  console.log('>> one');
+  await next();
+  console.log('<< one');
 };
 
+const two = async (ctx, next) => {
+  console.log('>> two');
+  next();
 
-const middleWare = koaConpose([one,two,three]);
+  const aaa = await testFun();
+  console.log(aaa);
+  console.log('<< two');
+};
+
+async function testFun() {
+  return new Promise(resolve => {
+    resolve('testfun');
+  });
+}
+
+const three = (ctx, next) => {
+  console.log('>> three');
+  next();
+  console.log('<< three');
+};
+
+const middleWare = koaConpose([one, two, three]);
 // app.use(one);
 // app.use(two);
 // app.use(three);
@@ -88,22 +81,17 @@ app.use(middleWare);
 
 // });
 
-
-
-
 // app.use(bodyParse());
 // app.use(koaStatic(path.join(__dirname, './dist')));
-
 
 const router = new koaRouter();
 
 app.use(router.routes()).use(router.allowedMethods());
 
-router.get('/', async (ctx,next)=>{
-	ctx.body = 'hello get';
-	await next();
+router.get('/', async (ctx, next) => {
+  ctx.body = 'hello get';
+  await next();
 });
-
 
 // app.use(async ctx=>{
 // 	// let params = await parseParam(ctx);
@@ -114,41 +102,29 @@ router.get('/', async (ctx,next)=>{
 // 	};
 // });
 
-
-
-
-function parseParam(ctx){
-	
-	return new Promise((resolve, reject)=>{
-		let paramsdata = '';
-		ctx.req.on('data', data=>{paramsdata +=data});
-		ctx.req.addListener('end', ()=>{resolve(parseQueryStr(paramsdata))});
-	})
+function parseParam(ctx) {
+  return new Promise((resolve, reject) => {
+    let paramsdata = '';
+    ctx.req.on('data', data => { paramsdata += data; });
+    ctx.req.addListener('end', () => { resolve(parseQueryStr(paramsdata)); });
+  });
 }
 
-
-
-function logger(ctx,next){
-	console.log(`${Date.now()}-${ctx.request.method}-${ctx.request.url}`);
-	next();
+function logger(ctx, next) {
+  console.log(`${Date.now()}-${ctx.request.method}-${ctx.request.url}`);
+  next();
 }
 
-function parseQueryStr(queryStr){
-	let queryData = {};
-	let queryStrList = queryStr.split('&');
-	for(let [index, queryStr] of queryStrList.entries()){
-		let itemList = queryStr.split('=');
-		queryData[itemList[0]] = decodeURIComponent(itemList[1]);
-	}
-	return queryData;
-
+function parseQueryStr(queryStr) {
+  const queryData = {};
+  const queryStrList = queryStr.split('&');
+  for (const [index, queryStr] of queryStrList.entries()) {
+    const itemList = queryStr.split('=');
+    queryData[itemList[0]] = decodeURIComponent(itemList[1]);
+  }
+  return queryData;
 }
-
 
 app.listen(9999);
 
-console.log('app start at port 9999')
-
-
-
-
+console.log('app start at port 9999');

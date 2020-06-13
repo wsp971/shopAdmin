@@ -4,111 +4,162 @@
     }
 </style>
 <template>
-    <Row v-show="dishData.name">
-        <Col span="24" >
-        <Card dis-hover>
-            <p slot="title">菜品信息</p>
-            <Row>
-                <Col span="4" >菜品名称</Col>
-                <Col span=20>{{dishData.name}}</Col>
-            </Row>
+  <Row v-show="dishData.name">
+    <i-col span="24">
+      <Card dis-hover>
+        <p slot="title">
+          菜品信息
+        </p>
+        <Row>
+          <i-col span="4">
+            菜品名称
+          </i-col>
+          <i-col span="20">
+            {{ dishData.name }}
+          </i-col>
+        </Row>
 
-            <Row>
-                <Col span="4" >菜品价格</Col>
-                <Col span=20>{{dishData.price}}</Col>
-            </Row>
-            <Row>
-                <Col span="4" >菜品评分</Col>
-                <Col span=20> {{dishData.comments | averages}}</Col>
-            </Row>
-            <Row>
-                <Col span="4" >收藏人数</Col>
-                <Col span="20">{{dishData.favourites}}</Col>
-            </Row>
-            <Row>
-                <Col span="4" >菜品标签</Col>
-                <Col span="20">
-                    <template v-for= "tag in hasTag " >
-                        <Tag :color="tag.color" >{{tag.name}}</Tag>
-                    </template>
-                </Col>
-            </Row>
-            <Row>
-                <Col span="4">菜品描述</Col>
-                <Col span="20">{{dishData.description}}</Col>
-            </Row>
-            <Row>
-                <Col span="4">菜品图片</Col>
-            </Row>
-            <Row v-for="item in dishData.pics">
-                <Col span="20" offset="2">
-                <img :src="item" alt="" class="dishPic">
-                </Col>
-            </Row>
-        </Card>
-        </Col>
-    </Row>
-
+        <Row>
+          <i-col span="4">
+            菜品价格
+          </i-col>
+          <i-col span="20">
+            {{ dishData.price }}
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            菜品评分
+          </i-col>
+          <i-col span="20">
+            {{ dishData.comments | averages }}
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            收藏人数
+          </i-col>
+          <i-col span="20">
+            {{ dishData.favourites }}
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            菜品标签
+          </i-col>
+          <i-col span="20">
+            <Tag
+              v-for="(tag,index) in hasTag "
+              :key="index"
+              :i-color="tag.color"
+            >
+              {{ tag.name }}
+            </Tag>
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            菜品描述
+          </i-col>
+          <i-col span="20">
+            {{ dishData.description }}
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            菜品图片
+          </i-col>
+        </Row>
+        <Row
+          v-for="(item,index) in dishData.pics"
+          :key="index"
+        >
+          <i-col
+            span="20"
+            offset="2"
+          >
+            <img
+              :src="item"
+              alt=""
+              class="dishPic"
+            />
+          </i-col>
+        </Row>
+      </Card>
+    </i-col>
+  </Row>
 </template>
 <script>
 
-	import {Card,Row,Col,Tag} from 'iview';
+const tagMap = {
 
-	const tagMap = {
+  new: {
+    name: '新品', color: 'primary', isCheck: true, key: 'new',
+  },
+  hot: {
+    name: '热门', color: 'error', isCheck: false, key: 'hot',
+  },
+  saleGood: {
+    name: '热卖', color: 'orange', isCheck: false, key: 'saleGood',
+  },
+  hotter: {
+    name: '超火爆', color: 'gold', isCheck: false, key: 'hotter',
+  },
+  minus: {
+    name: '满减', color: 'cyan', isCheck: false, key: 'minus',
+  },
+  discount: {
+    name: '狠优惠', color: 'volcano', isCheck: true, key: 'discount',
+  },
+  style: {
+    name: '有格调', color: 'green', isCheck: false, key: 'style',
+  },
+  sign: {
+    name: '招牌', color: 'red', isCheck: false, key: 'sign',
+  },
+  newDiscount: {
+    name: '新客立减', color: 'pink', isCheck: false, key: 'newDiscount',
+  },
+  packet: {
+    name: '有红包', color: 'geekblue', isCheck: false, key: 'packet',
+  },
 
-        'new':{name:'新品',color:'primary',isCheck: true,key:'new'},
-        'hot':       {name:'热门',color:'error',isCheck: false, key:'hot'},
-        'saleGood':       {name:'热卖',color:'orange',isCheck: false, key:'saleGood'},
-        'hotter':      {name:'超火爆',color:'gold',isCheck: false, key:'hotter'},
-        'minus':     {name:'满减',color:'cyan',isCheck: false, key:'minus'},
-        'discount':     {name:'狠优惠',color:'volcano',isCheck: true,key:'discount'},
-        'style':    {name:'有格调',color:'green',isCheck: false, key:'style'},
-        'sign':     {name:'招牌',color:'red',isCheck: false, key:'sign'},
-        'newDiscount':    {name:'新客立减',color:'pink',isCheck: false, key:'newDiscount'},
-        'packet':   {name:'有红包',color:'geekblue',isCheck: false, key:'packet'}
+};
 
+export default {
+  filters: {
+    averages: arr => {
+      if (!arr) {
+        return 0;
+      }
+      return arr.average();
+    },
+  },
+  props: ['dishData'],
+
+  data() {
+    return {
+      tagMap,
     };
+  },
 
-	export default {
-		props:['dishData'],
-		components:{
-			Card,Row,Col,Tag
-		},
-
-		data(){
-			return {
-				tagMap
-			}
-		},
-
-        computed:{
-                hasTag: function(){
-                let hasTag = {};
-                    if(!this.dishData.name) return;
-                                for(let key in tagMap ){
-                    if(this.dishData.tags.indexOf(key) > -1){
-                        hasTag[key] = tagMap[key];
-                    }
-                }
-                return hasTag;
-            }
-        },
-
-        mounted(){
-
-        },
-
-
-        filters:{
-			averages: (arr) =>{
-                if(!arr){
-                	return;
-                }
-				return arr.average();
-            }
+  computed: {
+    hasTag() {
+      const tags = {};
+      if (!this.dishData.name) return tags;
+      for (const key in tagMap) {
+        if (this.dishData.tags.indexOf(key) > -1) {
+          tags[key] = tagMap[key];
         }
+      }
+      return tags;
+    },
+  },
 
-	}
+  mounted() {
 
+  },
+
+};
 
 </script>
