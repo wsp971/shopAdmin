@@ -65,7 +65,6 @@ const webpackConfig = {
       '@config': config.isdebug ? path.resolve(__dirname, './config/dev.js') : path.resolve(__dirname, './config/prd.js'),
     },
   },
-
   plugins: [
     new VueLoaderPlugin(),
 
@@ -114,5 +113,7 @@ Object.keys(htmlMap).forEach(key => {
 });
 
 webpackConfig.entry = jsEntryMap;
+
+webpackConfig.devtool = 'source-map';
 
 module.exports = webpackConfig;

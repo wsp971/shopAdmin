@@ -46,7 +46,7 @@
           theme="dark"
           active-name="1"
         >
-          <div class="layout-logo" />
+          <div class="layout-logo"></div>
         </Menu>
       </Header>
       <Layout>

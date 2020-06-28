@@ -201,14 +201,6 @@
                 </div>
               </i-col>
             </Row>
-            <Row>
-              <i-col
-                span="13"
-                offset="7"
-              >
-                <div id="infoDiv"></div>
-              </i-col>
-            </Row>
           </div>
 
           <div class="formGroup">
@@ -270,6 +262,7 @@ export default {
         viewPic: '',
         visible: false,
         errTip: '',
+        city: '',
         shopName: StorageShop.name,
         contacts: StorageShop.contacts,
         logo: StorageShop.logo,
@@ -277,10 +270,12 @@ export default {
         address: StorageShop.address,
         modifyShop: StorageShop,
         uploadAction,
+        latLng: StorageShop.latLng,
         uploadList: [],
         defaultList: [{
           url: StorageShop.logo,
         }],
+        markers: [],
       };
     }
     return {
@@ -313,10 +308,10 @@ export default {
   mounted() {
     console.log(this.$refs.upload.fileList);
     this.uploadList = this.$refs.upload.fileList;
-
-    // this.initMap();
-
-    this.getClientIp();
+    this.getClientIp()
+      .then(this.initMap)
+      .then(this.getCityByIp)
+      .then(this.serchService);
   },
   methods: {
     createShop() {
@@ -347,6 +342,7 @@ export default {
       }
 
       let shopData = {
+        city: this.city,
         name: this.shopName,
         phone: this.phone,
         address: this.address,
@@ -408,17 +404,21 @@ export default {
     },
 
     getClientIp() {
-      this.$ajax.get({
+      return this.$ajax.get({
         url: '/shop/getClientIp',
       }).then(res => {
         this.clientIp = res.data.ip;
-        this.initMap();
+        if (this.clientIp === '127.0.0.1') {
+          // 测试 todo 删除
+          this.clientIp = '119.123.68.151';
+        }
       });
     },
 
     handleSuccess(res, file) {
       file.url = file.response.filename;
     },
+    /* global qq  */
     // 根据ip 查询城市信息，渲染城市所在地图
     getCityByIp() {
       const self = this;
@@ -431,19 +431,37 @@ export default {
             // city.style.display = 'inline';
             // city.innerHTML = '所在位置: ' + results.detail.name;
             self.city = results.detail.name;
-            self.map.setCenter(results.detail.latLng);
+            // 设置 店铺位置为当前地图中央
+            const position = results.detail.latLng;
+            if (self.latLng.lat) {
+              position.lat = parseFloat(self.latLng.lat);
+              position.lng = parseFloat(self.latLng.lng);
+            }
+            self.map.setCenter(position);
             self.marker = new qq.maps.Marker({// 设置marker标记
+              // icon: new qq.maps.MarkerImage(
+              //   'http://aoshiman.com.cn/uploads/1593341238469.png',
+              //   new qq.maps.Size(42, 68),
+              // ),
               map: self.map,
-              position: results.detail.latLng,
+              position,
               draggable: true,
             });
-
+            // self.markers.push(self.marker);
             qq.maps.event.addListener(self.marker, 'click', event => {
-              // console.log(pois[n]);
-              // self.address= pois[n].address;
+              // 转换 经纬度 为 地理位置
+              const geocoder = new qq.maps.Geocoder();
+              geocoder.setError(err => {
+                console.log('err', err);
+              });
+              geocoder.setComplete(result => {
+                console.log('address', result);
+                self.address = result.detail.address;
+              });
+              // 根据经纬度获取地理位置
+              geocoder.getAddress(event.latLng);
               self.latLng = event.latLng;
             });
-
             resolve();
           },
         });
@@ -463,7 +481,7 @@ export default {
         // 设置每页的结果数为5
         pageCapacity: 5,
         // 设置展现查询结构到infoDIV上
-        panel: document.getElementById('infoDiv'),
+        // panel: document.getElementById('infoDiv'),
         // 设置动扩大检索区域。默认值true，会自动检索指定城市以外区域。
         autoExtend: true,
         // 检索成功的回调函数
@@ -478,6 +496,7 @@ export default {
               const marker = new qq.maps.Marker({
                 map: self.map,
                 position: poi.latLng,
+                animation: qq.maps.MarkerAnimation.BOUNCE
               });
               marker.setTitle(i + 1);
               self.markers.push(marker);
@@ -488,6 +507,9 @@ export default {
               });
             }(i));
           }
+          // 设置可拖拽 market 到 搜索区域中央，仍然可以调整位置
+          const center = latlngBounds.getCenter();
+          self.marker.setPosition(center);
           // 调整地图视野
           self.map.fitBounds(latlngBounds);
         },
@@ -510,7 +532,7 @@ export default {
     },
     // 清除地图上的marker
     clearOverlays(overlays) {
-      let overlay;
+      let overlay = overlays.pop();
       while (overlay) {
         overlay.setMap(null);
         overlay = overlays.pop();
@@ -520,16 +542,15 @@ export default {
     // 初始化地图
     initMap() {
       this.map = new qq.maps.Map(document.getElementById('mapContainer'), {
-        center: new qq.maps.LatLng(39.916527, 116.397128),
         zoom: 13,
       });
 
       // 根据ip 来定位城市。
-      this.getCityByIp().then(this.serchService);
+
       // this.serchService();
       //   标注覆盖物
       // eslint-disable-next-line no-new
-      new qq.maps.LatLng(39.914850, 116.403765);
+      // new qq.maps.LatLng(39.914850, 116.403765);
     },
     // geolocation_ip();
     //
@@ -650,15 +671,11 @@ export default {
         visibility: hidden;
     }
 
-    #mapContainer,#infoDiv{
+    #mapContainer{
         width: 420px;
         height: 400px;
         position:relative;
     }
-    #infoDiv{
-        height:200px;
-     }
-
     .city{
         position:absolute;
         top:0;
