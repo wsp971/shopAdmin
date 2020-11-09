@@ -1,11 +1,11 @@
 {
   "name": "adminiview",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "iview 开发店铺管理后台",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "export NODE_ENV=development && webpack-dev-server ",
+    "server": "export NODE_ENV=development && webpack-dev-server",
     "build": "export NODE_ENV=production && webpack",
     "koa": "node server.js",
     "lint": "eslint ./js/**/*.{js,vue}",
@@ -34,7 +34,8 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.16.2",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "semantic-release": "^17.1.1"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -53,5 +54,9 @@
     "koa-router": "^7.4.0",
     "view-design": "^4.2.0",
     "vue": "^2.5.16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wsp971/shopAdmin.git"
   }
 }

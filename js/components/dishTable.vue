@@ -86,6 +86,20 @@ export default {
                 },
               },
             }, '详情'),
+            h('Button', {
+              props: {
+                type: 'success',
+                size: 'small',
+              },
+              style: {
+                marginRight: '5px',
+              },
+              on: {
+                click: () => {
+                  this.editDishes(params);
+                },
+              },
+            }, '编辑'),
           ]),
         },
       ],
@@ -135,6 +149,9 @@ export default {
     },
     addDishes() {
       this.$emit('showModal');
+    },
+    editDishes(params) {
+      this.$emit('editDish', params.row);
     },
     remove(params) {
       this.$ajax.get({

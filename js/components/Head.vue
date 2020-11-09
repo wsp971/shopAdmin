@@ -47,6 +47,13 @@
           active-name="1"
         >
           <div class="layout-logo"></div>
+
+          <Badge dot>
+            <Icon
+              type="ios-bell-outline"
+              size="26"
+            />
+          </Badge>
         </Menu>
       </Header>
       <Layout>

@@ -254,7 +254,7 @@ export default {
     myLayout
   },
   data() {
-    const uploadAction = 'http://aoshiman.com.cn/shopServer/shop/upload';
+    const uploadAction = '//aoshiman.com.cn/shopServer/shop/upload';
     const StorageShop = JSON.parse(sessionStorage.getItem('modifyShopData'));
     sessionStorage.removeItem('modifyShopData');
     if (StorageShop) {
@@ -320,22 +320,18 @@ export default {
         this.errTip = '请输入店铺名称！';
         return;
       }
-
       if (!this.contacts) {
         this.errTip = '请输入联系人';
         return;
       }
-
       if (!this.phone || !/[\d-]{7,11}/.test(this.phone)) {
         this.errTip = '请输入正确的电话号码';
         return;
       }
-
       if (!this.address) {
         this.errTip = '请输入地址';
         return;
       }
-
       if (!this.uploadList[0]) {
         this.errTip = '请上传店铺logo';
         return;
@@ -371,9 +367,6 @@ export default {
         });
         return;
       }
-
-      // let formData = new FormData(document.forms["shopForm"]);
-
       this.$ajax.post({
         url: '/shop/insert',
         data: shopData,

@@ -7,20 +7,25 @@
           theme="dark"
           active-name="1"
         >
-          <div class="layout-logo">
+          <!-- <div class="layout-logo">
             <img
               src="//www.baidu.com/img/baidu_jgylogo3.gif"
               alt=""
             />
-          </div>
+          </div> -->
           <p class="admin_title">
             商家店铺美食管理系统
           </p>
           <div class="opreate_option">
-            hello  {{ loginName }}  &nbsp;
+            hello  {{ loginName ||'李晶' }}  &nbsp;
+            <Badge
+              :count="10"
+              @click.stop="showMessage"
+            />
+
             <Button
               type="error"
-              @click.stop="logout"
+              @click="showMessage"
             >
               <Icon type="md-log-out" /> 退出
             </Button>
@@ -105,6 +110,14 @@ export default {
     this.getloginName();
   },
   methods: {
+
+    showMessage() {
+      console.log('xx', this.$Notice);
+      this.$Notice.info({
+        title: '您有新订单啦',
+        desc: '订单客户：wsp971<br>联系电话：13760251866; <br>菜品:肉夹馍	; <br>数量：1份'
+      });
+    },
     logout() {
       this.$cookie.del('loginname', '/', '.aoshiman.com.cn');
       this.$cookie.del('username', '/', '.aoshiman.com.cn');

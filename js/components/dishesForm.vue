@@ -40,7 +40,7 @@
 <template>
   <Modal
     v-model="isShow"
-    title="添加菜品"
+    :title="formDes.titleDes"
     :footer-hide="true"
     :closable="false"
     width="800"
@@ -80,6 +80,13 @@
         <i-input
           v-model="formItem.prePrice"
           placeholder="请输入菜品原价"
+        />
+      </FormItem>
+
+      <FormItem label="热量">
+        <i-input
+          v-model="formItem.heatQuatity"
+          placeholder="请输入菜品的热量，单位：千卡"
         />
       </FormItem>
 
@@ -161,7 +168,7 @@
           type="primary"
           @click="addDish"
         >
-          添加
+          {{ formDes.buttonDes }}
         </Button>
         <Button
           style="margin-left: 8px"
@@ -172,12 +179,37 @@
       </FormItem>
       <div slot="footer"></div>
     </Form>
+    <Modal
+      v-model="visible"
+      style="z-index:1000"
+      title="View Image"
+    >
+      <img
+        v-if="visible"
+        :src="viewPic"
+        style="width: 100%"
+      />
+    </Modal>
   </Modal>
 </template>
 <script>
 
 export default {
-  props: ['isShow', 'shopId'],
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    shopId: {
+      type: String,
+      required: true
+    },
+    editDishData: {
+      type: Object,
+      required: false,
+      default: null
+    }
+  },
   data() {
     const uploadAction = '//aoshiman.com.cn/shopServer/shop/upload';
     return {
@@ -185,7 +217,8 @@ export default {
         name: '',
         type: '',
         price: 0,
-        prrPrice: 0,
+        prePrice: 0,
+        heatQuatity: '',
         description: '',
       },
       dishTypeMap: this.$dishTypeMap,
@@ -194,7 +227,7 @@ export default {
       defaultList: [],
       tags: [
         {
-          name: '新品', color: 'primary', isCheck: true, key: 'new',
+          name: '新品', color: 'primary', isCheck: false, key: 'new',
         },
         {
           name: '热门', color: 'error', isCheck: false, key: 'hot',
@@ -209,7 +242,7 @@ export default {
           name: '满减', color: 'cyan', isCheck: false, key: 'minus',
         },
         {
-          name: '狠优惠', color: 'volcano', isCheck: true, key: 'discount',
+          name: '狠优惠', color: 'volcano', isCheck: false, key: 'discount',
         },
         {
           name: '有格调', color: 'green', isCheck: false, key: 'style',
@@ -224,6 +257,7 @@ export default {
           name: '有红包', color: 'geekblue', isCheck: false, key: 'packet',
         },
       ],
+      visible: false,
     };
   },
   computed: {
@@ -233,6 +267,40 @@ export default {
     hasTags() {
       return this.tags.filter(item => this.$refs[item.key][0].isChecked);
     },
+    formDes() {
+      return {
+        titleDes: this.editDishData ? '修改菜品' : '新增',
+        buttonDes: this.editDishData ? '修改' : '添加'
+      };
+    }
+  },
+  watch: {
+    editDishData(dishData) {
+      if (dishData) {
+        const {
+          name, type, price, prePrice, heatQuatity, description
+        } = dishData;
+        this.formItem = {
+          name,
+          type: `${type}`,
+          price,
+          prePrice,
+          heatQuatity,
+          description,
+        };
+        this.uploadList = dishData.pics.map(pic => ({
+          url: pic,
+          status: 'finished'
+        }));
+        this.$refs.upload.fileList = this.uploadList;
+        this.tags.forEach(tag => {
+          if (dishData.tags.indexOf(tag.key) > -1) {
+            tag.isCheck = true;
+          }
+        });
+        console.log('editDishData', dishData);
+      }
+    }
   },
   mounted() {
     console.log(this.$refs.upload.fileList);
@@ -263,8 +331,15 @@ export default {
         tags: this.hasTags.map(item => item.key),
       });
 
+      if (this.editDishData) {
+        postData.dishId = this.editDishData._id;
+        postData.favourites = this.editDishData.favourites;
+        postData.comments = this.editDishData.comments;
+      }
+      console.log('postdata', postData);
+      const url = this.editDishData ? '/dish/update' : '/dish/insert';
       this.$ajax.post({
-        url: '/dish/insert',
+        url,
         data: postData,
       }).then(res => {
         if (res.data.code === 0) {
@@ -273,24 +348,39 @@ export default {
         } else {
           this.$Message.error('添加失败');
         }
-        this.formItem = { name: '', type: '', description: '' };
+        this.resetForm();
         this.$emit('hideModal');
       }).catch(e => {
         console.log(e);
         this.$emit('hideModal');
+        this.resetForm();
         this.$Message.error('添加出错');
       });
     },
     cancel() {
       this.$emit('hideModal');
+      this.resetForm();
     },
-
+    resetForm() {
+      this.formItem = {
+        name: '',
+        type: '',
+        description: '',
+        price: '',
+        prePrice: '',
+        heatQuatity: '',
+      };
+      this.$refs.upload.fileList = [];
+      this.tags.forEach(tag => { tag.isCheck = false; });
+      this.uploadList = this.$refs.upload.fileList;
+    },
     handleView(pic) {
       this.viewPic = pic;
       this.visible = true;
     },
     handleRemove(file) {
       const { fileList } = this.$refs.upload;
+
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
       // this.logo = '';
     },

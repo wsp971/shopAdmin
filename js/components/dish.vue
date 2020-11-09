@@ -1,7 +1,7 @@
 <style>
-    .dishPic{
-        width: 100%;
-    }
+  .dishPic{
+    width: 100%;
+  }
 </style>
 <template>
   <Row v-show="dishData.name">
@@ -29,6 +29,22 @@
         </Row>
         <Row>
           <i-col span="4">
+            菜品原价
+          </i-col>
+          <i-col span="20">
+            {{ dishData.prePrice }}
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
+            菜品热量
+          </i-col>
+          <i-col span="20">
+            {{ dishData.heatQuatity }} 千卡
+          </i-col>
+        </Row>
+        <Row>
+          <i-col span="4">
             菜品评分
           </i-col>
           <i-col span="20">
@@ -51,7 +67,7 @@
             <Tag
               v-for="(tag,index) in hasTag "
               :key="index"
-              :i-color="tag.color"
+              :color="tag.color"
             >
               {{ tag.name }}
             </Tag>
@@ -92,7 +108,6 @@
 <script>
 
 const tagMap = {
-
   new: {
     name: '新品', color: 'primary', isCheck: true, key: 'new',
   },
@@ -122,8 +137,7 @@ const tagMap = {
   },
   packet: {
     name: '有红包', color: 'geekblue', isCheck: false, key: 'packet',
-  },
-
+  }
 };
 
 export default {

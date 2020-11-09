@@ -16,11 +16,13 @@
           :shop-id="shopId"
           @showModal="showModal"
           @showDetail="showDishDetail"
+          @editDish="editDish"
         />
         <DishForm
           :is-show="addDish"
           :shop-id="shopId"
           @hideModal="hideModal"
+          :edit-dish-data="editDishData"
         />
         <Modal
           v-model="isShowDish"
@@ -53,6 +55,7 @@ export default {
       shopId,
       addDish: false,
       dishData: {},
+      editDishData: null,
       // dishData:{"comments":[5],"pics":["http://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar","http://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar","http://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar"],"_id":"5b897683716350420d4ca3e8","name":"232323","type":6,"description":"asdfasdfadfa","shopid":1535733011012,"favourites":85,"__v":0},
       isShowDish: false,
     };
@@ -60,9 +63,15 @@ export default {
   methods: {
     hideModal() {
       this.addDish = false;
+      this.editDishData = null;
     },
     showModal() {
       this.addDish = true;
+    },
+    editDish(dishData) {
+      console.log('dishdata', dishData);
+      this.addDish = true;
+      this.editDishData = dishData;
     },
     cancel() {
       this.$linkPage('/html/shopList.html');
